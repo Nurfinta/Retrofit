@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 public class SplashActivity extends AppCompatActivity {
     TextView lblAppName, lblAppTittle, lblAppVersion;
-    private Session session;
+    public static Session session;
     private View rView;
 
     public Session getSession() {
