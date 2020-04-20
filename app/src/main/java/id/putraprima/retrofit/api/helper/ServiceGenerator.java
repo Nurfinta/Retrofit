@@ -14,7 +14,10 @@ public class ServiceGenerator {
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
-    private static Retrofit retrofit = builder.build();
+    private static Retrofit retrofit;
+    public static Retrofit retrofit(){
+        return retrofit;
+    }
 
     private static HttpLoggingInterceptor logging =
             new HttpLoggingInterceptor()
@@ -23,7 +26,8 @@ public class ServiceGenerator {
     private static OkHttpClient.Builder httpClient =
             new OkHttpClient.Builder();
 
-    public static <S> S createService(Class<S> serviceClass) {
+    public static <S> S createService(
+            Class<S> serviceClass) {
         if (!httpClient.interceptors().contains(logging)) {
             httpClient.addInterceptor(logging);
             builder.client(httpClient.build());

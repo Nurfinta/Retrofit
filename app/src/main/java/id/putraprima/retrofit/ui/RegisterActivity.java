@@ -6,11 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import id.putraprima.retrofit.R;
 import id.putraprima.retrofit.api.helper.ServiceGenerator;
+import id.putraprima.retrofit.api.models.ApiError;
+import id.putraprima.retrofit.api.models.ErrorUtils;
 import id.putraprima.retrofit.api.models.RegisterRequest;
 import id.putraprima.retrofit.api.models.RegisterResponse;
 import id.putraprima.retrofit.api.services.ApiInterface;
@@ -40,8 +46,48 @@ public class RegisterActivity extends AppCompatActivity {
         call.enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                setResponse(rView, "Daftar Berhasil");
-                startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                if (response.isSuccessful()){
+                    setResponse(rView, "Daftar Berhasil");
+                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                }else {
+                    String errMsg ="";
+                    ApiError error = ErrorUtils.parseError(response);
+
+                    if (error.getError().getPassword() != null && error.getError().getEmail() != null){
+                        StringBuilder sb = new StringBuilder();
+                        int i  = 0;
+                        while (i < error.getError().getPassword().size()){
+                            sb.append(error.getError().getPassword().get(i)).append("\n");
+                            i++;
+                        }
+                        i =0;
+                        while (i < error.getError().getEmail().size()){
+                            sb.append(error.getError().getEmail().get(i)).append("\n");
+                            i++;
+                        }
+                        errMsg = sb.toString();
+                        setResponse(rView, errMsg);
+                    }else if (error.getError().getPassword() != null && error.getError().getEmail() == null){
+                        StringBuilder sb = new StringBuilder();
+                        int i  = 0;
+                        while (i < error.getError().getPassword().size()){
+                            sb.append(error.getError().getPassword().get(i)).append("\n");
+                            i++;
+                        }
+                        errMsg = sb.toString();
+                        setResponse(rView, errMsg);
+                    }else if (error.getError().getPassword() == null && error.getError().getEmail() != null){
+                    StringBuilder sb = new StringBuilder();
+                    int i  = 0;
+                    i =0;
+                    while (i < error.getError().getEmail().size()){
+                        sb.append(error.getError().getEmail().get(i)).append("\n");
+                        i++;
+                    }
+                    errMsg = sb.toString();
+                    setResponse(rView, errMsg);
+                }
+            }
             }
 
             @Override
@@ -52,11 +98,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void handleRegister(View view) {
-        if (txtPass.getText().toString().equals(txtConPass.getText().toString())){
+//        if (txtPass.getText().toString().equals(txtConPass.getText().toString())){
             register();
-        }else{
-            setResponse(rView, "Password tidak cocok");
-        }
+//        }else{
+//            setResponse(rView, "Password tidak cocok");
+//        }
     }
 
     public void setResponse(View view, String message){

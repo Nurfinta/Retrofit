@@ -75,11 +75,11 @@ public class SplashActivity extends AppCompatActivity {
     private void setAppInfo() {
         //TODO : 5. Implementasikan proses setting app info, app info pada fungsi ini diambil dari shared preferences
         //lblAppVersion dan lblAppName dimunculkan kembali dengan data dari shared preferences
-        lblAppVersion.setVisibility(View.VISIBLE);
-        lblAppName.setVisibility(View.VISIBLE);
+            lblAppVersion.setVisibility(View.VISIBLE);
+            lblAppName.setVisibility(View.VISIBLE);
 
-        lblAppName.setText(session.getApp());
-        lblAppVersion.setText(session.getVersion());
+            lblAppName.setText(session.getApp());
+            lblAppVersion.setText(session.getVersion());
     }
 
     private void checkAppVersion() {

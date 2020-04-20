@@ -6,12 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import id.putraprima.retrofit.R;
 import id.putraprima.retrofit.api.helper.ServiceGenerator;
+import id.putraprima.retrofit.api.models.ApiError;
 import id.putraprima.retrofit.api.models.Data;
+import id.putraprima.retrofit.api.models.Error;
+import id.putraprima.retrofit.api.models.ErrorUtils;
 import id.putraprima.retrofit.api.models.ProfileRequest;
 import id.putraprima.retrofit.api.models.ProfileResponse;
 import id.putraprima.retrofit.api.services.ApiInterface;
@@ -56,7 +63,21 @@ public class UpdateProfileActivity extends AppCompatActivity {
         call.enqueue(new Callback<Data<ProfileResponse>>() {
             @Override
             public void onResponse(Call<Data<ProfileResponse>> call, Response<Data<ProfileResponse>> response) {
-                setResponse(rView, "Update Data Berhasil! :)");
+                if (response.isSuccessful()){
+                    setResponse(rView, "Update Data Berhasil! :)");
+                    finish();
+                    Intent i = new Intent(UpdateProfileActivity.this, ProfileActivity.class);
+                    i.putExtra("token", token);
+                    startActivity(i);
+                }else{
+                    ApiError error = ErrorUtils.parseError(response);
+
+                    if (error.getError().getEmail() != null){
+                        for (int i = 0; i < error.getError().getEmail().size(); i++){
+                            setResponse(rView, error.getError().getEmail().get(i));
+                        }
+                    }
+                }
             }
 
             @Override
@@ -73,10 +94,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     public void handleUpdateProfile(View view) {
         updateData();
-        finish();
-        Intent i = new Intent(UpdateProfileActivity.this, ProfileActivity.class);
-        i.putExtra("token", token);
-        startActivity(i);
+
     }
 
     public void setResponse(View view, String message){

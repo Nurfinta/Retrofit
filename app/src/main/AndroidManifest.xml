@@ -4,6 +4,14 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -12,10 +20,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.ProfileActivity"></activity>
-        <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.TermActivity"></activity>
+        <activity android:name=".ui.MyActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4645445774401133~8710805636" />
+
+        <activity android:name=".ui.NewRecipeActivity" />
+        <activity android:name=".ui.RecipeActivity" />
         <activity android:name=".ui.UpdatePasswordActivity" />
         <activity android:name=".ui.UpdateProfileActivity" />
+        <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
